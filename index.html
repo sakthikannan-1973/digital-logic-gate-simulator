@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital Logic Gate Simulator</title>
+<style>
+body{font-family:Arial;background:#edf3fb;color:#17365d;text-align:center;margin:0}
+header{background:#12345a;color:white;padding:25px}
+main{max-width:650px;margin:25px auto;padding:15px}
+.card{background:white;padding:22px;border-radius:15px;margin:16px 0;box-shadow:0 4px 15px #0001}
+select,button{padding:12px;margin:8px;border-radius:8px;border:1px solid #bbb;font-size:16px}
+button{background:#1769aa;color:white;cursor:pointer}
+.result{font-size:36px;font-weight:bold;color:#087b52}
+table{margin:15px auto;border-collapse:collapse;width:100%}
+td,th{padding:10px;border:1px solid #ccd5e0}
+th{background:#dceafa}
+footer{padding:20px;color:#52657b}
+</style>
+</head>
+<body>
+<header>
+<h1>Digital Logic Gate Simulator</h1>
+<p>Interactive ECE Mini Project</p>
+</header>
+<main>
+<div class="card">
+<h2>Logic Gate Simulation</h2>
+<label>Select Gate: </label>
+<select id="gate" onchange="simulate()">
+<option>AND</option><option>OR</option><option>NOT</option>
+<option>NAND</option><option>NOR</option><option>XOR</option><option>XNOR</option>
+</select><br>
+<label>Input A: </label>
+<select id="a" onchange="simulate()"><option value="0">0</option><option value="1">1</option></select>
+<label id="blabel">Input B: </label>
+<select id="b" onchange="simulate()"><option value="0">0</option><option value="1">1</option></select>
+<h2>Output</h2>
+<div class="result" id="out">0</div>
+<p id="status">LOW (False)</p>
+</div>
+<div class="card">
+<h2>Truth Table</h2>
+<table><thead><tr><th>A</th><th id="bh">B</th><th>Output</th></tr></thead>
+<tbody id="rows"></tbody></table>
+</div>
+<div class="card">
+<h2>Project Information</h2>
+<p>This web-based simulator demonstrates seven digital logic gates using interactive binary inputs.</p>
+<p><b>Technology:</b> HTML, CSS and JavaScript</p>
+<p><b>Applications:</b> Digital electronics, computer architecture and logic circuit learning.</p>
+</div>
+</main>
+<footer>ECE Learning Project | Digital Logic Gate Simulator</footer>
+<script>
+function calc(g,a,b){
+switch(g){
+case "AND":return a&b;
+case "OR":return a|b;
+case "NOT":return 1-a;
+case "NAND":return 1-(a&b);
+case "NOR":return 1-(a|b);
+case "XOR":return a^b;
+case "XNOR":return 1-(a^b);
+}
+}
+function simulate(){
+let g=document.getElementById("gate").value;
+let a=+document.getElementById("a").value;
+let b=+document.getElementById("b").value;
+let one=g==="NOT";
+document.getElementById("b").style.display=one?"none":"inline-block";
+document.getElementById("blabel").style.display=one?"none":"inline";
+document.getElementById("bh").style.display=one?"none":"table-cell";
+let y=calc(g,a,b);
+document.getElementById("out").textContent=y;
+document.getElementById("status").textContent=y?"HIGH (True)":"LOW (False)";
+let html="";
+for(let x=0;x<=1;x++)for(let z=0;z<=(one?0:1);z++){
+html+=`<tr><td>${x}</td><td style="${one?'display:none':''}">${one?'-':z}</td><td>${calc(g,x,z)}</td></tr>`;
+}
+document.getElementById("rows").innerHTML=html;
+}
+simulate();
+</script>
+</body>
+</html>
